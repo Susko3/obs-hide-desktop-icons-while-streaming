@@ -20,86 +20,10 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <obs-frontend-api.h>
 
 #include "plugin-macros.generated.h"
+#include "windows-main.h"
 
 // FROM https://stackoverflow.com/a/53347282
-#include <ShlObj.h>     // Shell API
-#include <atlcomcli.h>  // CComPtr & Co.
-#include <string>
-#include <iostream>
 #include <system_error>
-
-// Throw a std::system_error if the HRESULT indicates failure.
-template< typename T >
-void ThrowIfFailed( HRESULT hr, T&& msg )
-{
-    if( FAILED( hr ) )
-        throw std::system_error{ hr, std::system_category(), std::forward<T>( msg ) };
-}
-
-// RAII wrapper to initialize/uninitialize COM
-struct CComInit
-{
-    CComInit() { ThrowIfFailed( ::CoInitialize( nullptr ), "CoInitialize failed" ); }
-    ~CComInit() { ::CoUninitialize(); }
-    CComInit( CComInit const& ) = delete;
-    CComInit& operator=( CComInit const& ) = delete;
-};
-
-// Query an interface from the desktop shell view.
-void FindDesktopFolderView( REFIID riid, void **ppv, std::string const& interfaceName )
-{
-    CComPtr<IShellWindows> spShellWindows;
-    ThrowIfFailed(
-        spShellWindows.CoCreateInstance( CLSID_ShellWindows ),
-        "Failed to create IShellWindows instance" );
-
-    CComVariant vtLoc( CSIDL_DESKTOP );
-    CComVariant vtEmpty;
-    long lhwnd;
-    CComPtr<IDispatch> spdisp;
-    ThrowIfFailed(
-        spShellWindows->FindWindowSW(
-            &vtLoc, &vtEmpty, SWC_DESKTOP, &lhwnd, SWFO_NEEDDISPATCH, &spdisp ),
-        "Failed to find desktop window" );
-
-    CComQIPtr<IServiceProvider> spProv( spdisp );
-    if( ! spProv )
-        ThrowIfFailed( E_NOINTERFACE, "Failed to get IServiceProvider interface for desktop" );
-
-    CComPtr<IShellBrowser> spBrowser;
-    ThrowIfFailed(
-        spProv->QueryService( SID_STopLevelBrowser, IID_PPV_ARGS( &spBrowser ) ),
-        "Failed to get IShellBrowser for desktop" );
-
-    CComPtr<IShellView> spView;
-    ThrowIfFailed(
-        spBrowser->QueryActiveShellView( &spView ),
-        "Failed to query IShellView for desktop" );
-
-    ThrowIfFailed(
-        spView->QueryInterface( riid, ppv ),
-        "Could not query desktop IShellView for interface " + interfaceName );
-}
-
-void SetDesktopIconsVisible(bool show)
-{
-    CComPtr<IFolderView2> spView;
-    FindDesktopFolderView( IID_PPV_ARGS(&spView), "IFolderView2" );
-
-    DWORD flags = 0;
-    ThrowIfFailed(
-        spView->GetCurrentFolderFlags( &flags ),
-        "GetCurrentFolderFlags failed" );
-
-    if(show)
-        flags = flags & ~FWF_NOICONS;
-    else
-        flags = flags | FWF_NOICONS;
-
-    ThrowIfFailed(
-        spView->SetCurrentFolderFlags( FWF_NOICONS, flags ),
-        "SetCurrentFolderFlags failed" );
-}
 
 void callback(enum obs_frontend_event event, void* data)
 {
