@@ -16,8 +16,8 @@ You should have received a copy of the GNU General Public License along
 with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
-#include <obs-module.h>
 #include <obs-frontend-api.h>
+#include <obs-module.h>
 
 #include "plugin-macros.generated.h"
 #include "windows-main.h"
@@ -25,27 +25,23 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 // FROM https://stackoverflow.com/a/53347282
 #include <system_error>
 
-void callback(enum obs_frontend_event event, void* data)
+void callback(obs_frontend_event event, void *data)
 {
-    (void)data;
+	(void)data;
 
-    try
-    {
-        switch(event)
-        {
-            case OBS_FRONTEND_EVENT_STREAMING_STARTED:
-                SetDesktopIconsVisible(false);
-                break;
+	try {
+		switch (event) {
+		case OBS_FRONTEND_EVENT_STREAMING_STARTED:
+			SetDesktopIconsVisible(false);
+			break;
 
-            case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
-                SetDesktopIconsVisible(true);
-                break;
-        }
-    }
-    catch (const std::system_error& e)
-    {
-        blog(LOG_ERROR, "Error: %s", e.what());
-    }
+		case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
+			SetDesktopIconsVisible(true);
+			break;
+		}
+	} catch (const std::system_error &e) {
+		blog(LOG_ERROR, "Error: %s", e.what());
+	}
 }
 
 OBS_DECLARE_MODULE()
@@ -55,13 +51,13 @@ bool obs_module_load(void)
 {
 	blog(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 
-    obs_frontend_add_event_callback(callback, nullptr);
+	obs_frontend_add_event_callback(callback, nullptr);
 	return true;
 }
 
 void obs_module_unload()
 {
-    obs_frontend_remove_event_callback(callback, nullptr);
+	obs_frontend_remove_event_callback(callback, nullptr);
 
 	blog(LOG_INFO, "plugin unloaded");
 }

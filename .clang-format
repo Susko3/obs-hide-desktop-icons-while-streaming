@@ -1,17 +1,19 @@
 # please use clang-format version 8 or later
 
-Standard: Cpp11
+Standard: c++11
 AccessModifierOffset: -8
 AlignAfterOpenBracket: Align
-AlignConsecutiveAssignments: false
-AlignConsecutiveDeclarations: false
+AlignConsecutiveAssignments:
+  Enabled: false
+AlignConsecutiveDeclarations:
+  Enabled: false
 AlignEscapedNewlines: Left
 AlignOperands: true
 AlignTrailingComments: true
 #AllowAllArgumentsOnNextLine: false  # requires clang-format 9
 #AllowAllConstructorInitializersOnNextLine: false  # requires clang-format 9
 AllowAllParametersOfDeclarationOnNextLine: false
-AllowShortBlocksOnASingleLine: false
+AllowShortBlocksOnASingleLine: Empty
 AllowShortCaseLabelsOnASingleLine: false
 AllowShortFunctionsOnASingleLine: Inline
 AllowShortIfStatementsOnASingleLine: false
@@ -25,7 +27,7 @@ BinPackArguments: true
 BinPackParameters: true
 BraceWrapping:
   AfterClass: false
-  AfterControlStatement: false
+  AfterControlStatement: Never
   AfterEnum: false
   AfterFunction: true
   AfterNamespace: false
@@ -53,7 +55,7 @@ Cpp11BracedListStyle: true
 DerivePointerAlignment: false
 DisableFormat: false
 FixNamespaceComments: false
-ForEachMacros: 
+ForEachMacros:
   - 'json_object_foreach'
   - 'json_object_foreach_safe'
   - 'json_array_foreach'
