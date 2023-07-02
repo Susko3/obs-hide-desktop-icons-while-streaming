@@ -24,6 +24,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <string>
 #include <system_error>
 
+namespace Windows {
+
 // Throw a std::system_error if the HRESULT indicates failure.
 template<typename T> void ThrowIfFailed(HRESULT hr, T &&msg)
 {
@@ -81,4 +83,6 @@ void SetDesktopIconsVisible(bool show)
 		flags = flags | FWF_NOICONS;
 
 	ThrowIfFailed(spView->SetCurrentFolderFlags(FWF_NOICONS, flags), "SetCurrentFolderFlags failed");
+}
+
 }

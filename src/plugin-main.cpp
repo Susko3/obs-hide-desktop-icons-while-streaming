@@ -20,7 +20,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <obs-module.h>
 
 #include "plugin-macros.generated.h"
-#include "windows-main.h"
+#include "Windows/windows-main.h"
 
 // FROM https://stackoverflow.com/a/53347282
 #include <system_error>
@@ -32,11 +32,11 @@ void callback(obs_frontend_event event, void *data)
 	try {
 		switch (event) {
 		case OBS_FRONTEND_EVENT_STREAMING_STARTED:
-			SetDesktopIconsVisible(false);
+			Windows::SetDesktopIconsVisible(false);
 			break;
 
 		case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
-			SetDesktopIconsVisible(true);
+			Windows::SetDesktopIconsVisible(true);
 			break;
 		}
 	} catch (const std::system_error &e) {

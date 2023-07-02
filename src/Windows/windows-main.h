@@ -19,11 +19,15 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #ifndef WINDOWS_MAIN_H
 #define WINDOWS_MAIN_H
 
+namespace Windows {
+
 /**
  * @brief Hide or show the desktop icons on Windows
- * 
+ *
  * @param show true to show, false to hide
  */
 void SetDesktopIconsVisible(bool show);
+
+}
 
 #endif
