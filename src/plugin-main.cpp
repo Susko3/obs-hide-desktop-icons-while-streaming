@@ -25,22 +25,45 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 // FROM https://stackoverflow.com/a/53347282
 #include <system_error>
 
+bool streamingActive = false;
+
+/**
+ * Whether desktop icons are visible, this is only a cached value and might not be 100% accurate wrt external
+ * changes of icon visibility.
+ */
+bool desktopIconsVisible = true;
+
+/**
+ * @brief Updates desktop icons visibility in line with current streaming (and other) states.
+ *
+ * @sa streamingActive
+ */
+void updateDesktopIconsVisibility()
+{
+	// hide icons if streaming is active.
+	bool newVisibility = !streamingActive;
+
+	if (newVisibility == desktopIconsVisible)
+		return;
+
+	try {
+		Windows::SetDesktopIconsVisible(newVisibility);
+		desktopIconsVisible = newVisibility;
+	} catch (const std::system_error &e) {
+		blog(LOG_ERROR, "Error: %s", e.what());
+	}
+}
+
 void callback(obs_frontend_event event, void *data)
 {
 	(void)data;
 
-	try {
-		switch (event) {
-		case OBS_FRONTEND_EVENT_STREAMING_STARTED:
-			Windows::SetDesktopIconsVisible(false);
-			break;
-
-		case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
-			Windows::SetDesktopIconsVisible(true);
-			break;
-		}
-	} catch (const std::system_error &e) {
-		blog(LOG_ERROR, "Error: %s", e.what());
+	switch (event) {
+	case OBS_FRONTEND_EVENT_STREAMING_STARTED:
+	case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
+		streamingActive = event == OBS_FRONTEND_EVENT_STREAMING_STARTED;
+		updateDesktopIconsVisibility();
+		break;
 	}
 }
 
@@ -50,6 +73,12 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 bool obs_module_load(void)
 {
 	blog(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
+
+	try {
+		desktopIconsVisible = Windows::GetDesktopIconsVisible();
+	} catch (const std::system_error &e) {
+		blog(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s", e.what());
+	}
 
 	obs_frontend_add_event_callback(callback, nullptr);
 	return true;

@@ -22,6 +22,13 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 namespace Windows {
 
 /**
+ * @brief Queries the operating system for desktop icons visibility.
+ *
+ * @return Whether the desktop icons are currently visible.
+ */
+bool GetDesktopIconsVisible();
+
+/**
  * @brief Hide or show the desktop icons on Windows
  *
  * @param show true to show, false to hide

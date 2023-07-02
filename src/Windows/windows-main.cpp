@@ -69,6 +69,17 @@ void FindDesktopFolderView(REFIID riid, void **ppv, std::string const &interface
 		      "Could not query desktop IShellView for interface " + interfaceName);
 }
 
+bool GetDesktopIconsVisible()
+{
+	CComPtr<IFolderView2> spView;
+	FindDesktopFolderView(IID_PPV_ARGS(&spView), "IFolderView2");
+
+	DWORD flags = 0;
+	ThrowIfFailed(spView->GetCurrentFolderFlags(&flags), "GetCurrentFolderFlags failed");
+
+	return flags & FWF_NOICONS;
+}
+
 void SetDesktopIconsVisible(bool show)
 {
 	CComPtr<IFolderView2> spView;
