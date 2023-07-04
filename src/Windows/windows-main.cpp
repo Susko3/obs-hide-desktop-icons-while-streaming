@@ -77,7 +77,7 @@ bool GetDesktopIconsVisible()
 	DWORD flags = 0;
 	ThrowIfFailed(spView->GetCurrentFolderFlags(&flags), "GetCurrentFolderFlags failed");
 
-	return flags & FWF_NOICONS;
+	return (flags & FWF_NOICONS) == 0;
 }
 
 void SetDesktopIconsVisible(bool show)
