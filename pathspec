@@ -1,0 +1,10 @@
+.github
+build-aux
+cmake
+data
+src
+.clang-format
+.cmake-format.json
+CMakeLists.txt
+CMakePresets.json
+buildspec.json
