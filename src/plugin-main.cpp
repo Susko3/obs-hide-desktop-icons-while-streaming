@@ -77,7 +77,8 @@ bool obs_module_load(void)
 	try {
 		desktopIconsVisible = Windows::GetDesktopIconsVisible();
 	} catch (const std::system_error &e) {
-		obs_log(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s", e.what());
+		obs_log(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s",
+			e.what());
 	}
 
 	obs_frontend_add_event_callback(callback, nullptr);
