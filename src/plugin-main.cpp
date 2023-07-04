@@ -18,8 +18,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 
 #include <obs-frontend-api.h>
 #include <obs-module.h>
+#include <plugin-support.h>
 
-#include "plugin-macros.generated.h"
 #include "Windows/windows-main.h"
 
 // FROM https://stackoverflow.com/a/53347282
@@ -50,7 +50,7 @@ void updateDesktopIconsVisibility()
 		Windows::SetDesktopIconsVisible(newVisibility);
 		desktopIconsVisible = newVisibility;
 	} catch (const std::system_error &e) {
-		blog(LOG_ERROR, "Error: %s", e.what());
+		obs_log(LOG_ERROR, "Error: %s", e.what());
 	}
 }
 
@@ -72,12 +72,12 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
 bool obs_module_load(void)
 {
-	blog(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
+	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 
 	try {
 		desktopIconsVisible = Windows::GetDesktopIconsVisible();
 	} catch (const std::system_error &e) {
-		blog(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s", e.what());
+		obs_log(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s", e.what());
 	}
 
 	obs_frontend_add_event_callback(callback, nullptr);
@@ -88,5 +88,5 @@ void obs_module_unload()
 {
 	obs_frontend_remove_event_callback(callback, nullptr);
 
-	blog(LOG_INFO, "plugin unloaded");
+	obs_log(LOG_INFO, "plugin unloaded");
 }
