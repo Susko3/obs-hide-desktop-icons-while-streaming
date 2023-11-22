@@ -1,5 +1,13 @@
 # How to update the base template to the latest `master`
 
+## Setup
+
+```shell
+git remote add template https://github.com/obsproject/obs-plugintemplate.git
+```
+
+## Updating
+
 Ensure a clean working tree
 
 ```shell
@@ -9,7 +17,7 @@ git reset --hard
 Pull the latest template data.
 
 ```shell
-git remote add template https://github.com/obsproject/obs-plugintemplate.git
+git fetch --all -p
 git checkout template/master --pathspec-from-file pathspec
 ```
 
@@ -31,4 +39,9 @@ and then commit.
 
 ```shell
 git commit
+```
+
+Remeber to write down the commit hash that you're updating to!
+```shell
+git log -1 template/master
 ```
