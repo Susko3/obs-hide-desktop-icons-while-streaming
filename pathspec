@@ -3,6 +3,7 @@ build-aux
 cmake
 data
 src
+:!src/plugin-main.c
 .clang-format
 .cmake-format.json
 CMakeLists.txt
