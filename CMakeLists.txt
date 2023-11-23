@@ -34,15 +34,15 @@ if(ENABLE_QT)
                AUTORCC ON)
 endif()
 
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    src/bindable/bindable.h
-    src/settings/settings.cpp
-    src/settings/settings.h
-    src/state/state.cpp
-    src/state/state.h
-    src/windows/windows-main.cpp
-    src/windows/windows-main.h
-    src/plugin-main.cpp
-)
+target_sources(
+  ${CMAKE_PROJECT_NAME}
+  PRIVATE src/bindable/bindable.h
+          src/settings/settings.cpp
+          src/settings/settings.h
+          src/state/state.cpp
+          src/state/state.h
+          src/windows/windows-main.cpp
+          src/windows/windows-main.h
+          src/plugin-main.cpp)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})
