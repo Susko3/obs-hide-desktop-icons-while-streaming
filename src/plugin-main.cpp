@@ -17,39 +17,18 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
 #include "settings/settings.h"
+#include "state/state.h"
 #include "windows/windows-main.h"
 #include <obs-frontend-api.h>
 #include <obs-module.h>
 #include <plugin-support.h>
 #include <system_error>
 
-bool streamingActive = false;
-
-/**
- * Whether desktop icons are visible, this is only a cached value and might not be 100% accurate wrt external
- * changes of icon visibility.
- */
-bool desktopIconsVisible = true;
-
-/**
- * @brief Updates desktop icons visibility in line with current streaming (and other) states.
- *
- * @sa streamingActive
- */
-void updateDesktopIconsVisibility()
+void update(const size_t index, const bool value)
 {
-	// hide icons if streaming is active.
-	bool newVisibility = !streamingActive;
-
-	if (newVisibility == desktopIconsVisible)
-		return;
-
-	try {
-		Windows::SetDesktopIconsVisible(newVisibility);
-		desktopIconsVisible = newVisibility;
-	} catch (const std::system_error &e) {
-		obs_log(LOG_ERROR, "Error: %s", e.what());
-	}
+	auto val = state::current_state.get_value();
+	val[index] = value;
+	state::current_state.set_value(val);
 }
 
 void callback(obs_frontend_event event, void *data)
@@ -61,10 +40,17 @@ void callback(obs_frontend_event event, void *data)
 		settings::on_obs_frontend_event_finished_loading();
 		break;
 
-	case OBS_FRONTEND_EVENT_STREAMING_STARTED:
+	case OBS_FRONTEND_EVENT_STREAMING_STARTING:
+		update(state::bit_index::streaming_active, true);
+		break;
 	case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
-		streamingActive = event == OBS_FRONTEND_EVENT_STREAMING_STARTED;
-		updateDesktopIconsVisibility();
+		update(state::bit_index::streaming_active, false);
+		break;
+	case OBS_FRONTEND_EVENT_RECORDING_STARTING:
+		update(state::bit_index::recording_active, true);
+		break;
+	case OBS_FRONTEND_EVENT_RECORDING_STOPPED:
+		update(state::bit_index::recording_active, false);
 		break;
 
 	case OBS_FRONTEND_EVENT_EXIT:
@@ -84,10 +70,13 @@ bool obs_module_load()
 	settings::on_obs_module_load();
 
 	try {
-		desktopIconsVisible = Windows::GetDesktopIconsVisible();
+		state::desktop_icons_visible.set_value(Windows::GetDesktopIconsVisible());
 	} catch (const std::system_error &e) {
 		obs_log(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s", e.what());
+		state::desktop_icons_visible.set_value(true);
 	}
+
+	state::desktop_icons_visible.bind_value_changed(Windows::SetDesktopIconsVisible);
 
 	obs_frontend_add_event_callback(callback, nullptr);
 	return true;
@@ -96,6 +85,9 @@ bool obs_module_load()
 void obs_module_unload()
 {
 	obs_frontend_remove_event_callback(callback, nullptr);
+
+	state::desktop_icons_visible.unbind_all();
+	state::desktop_icons_visible.set_value(false);
 
 	obs_log(LOG_INFO, "plugin unloaded");
 }
