@@ -186,7 +186,7 @@ void on_obs_frontend_event_finished_loading()
 	obs_data_release(settings);
 	bfree(json_path);
 
-	obs_frontend_add_tools_menu_item("Auto Hide Desktop Icons", &open_settings, nullptr);
+	obs_frontend_add_tools_menu_item("Auto Hide &Desktop Icons", &open_settings, nullptr);
 }
 
 void on_obs_frontend_event_exit()
