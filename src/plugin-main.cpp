@@ -59,6 +59,15 @@ void callback(obs_frontend_event event, void *data)
 	}
 }
 
+void set_icons_visible(const bool value)
+{
+	try {
+		Windows::SetDesktopIconsVisible(value);
+	} catch (const std::system_error &e) {
+		obs_log(LOG_ERROR, "Error: %s", e.what());
+	}
+}
+
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 
@@ -76,7 +85,7 @@ bool obs_module_load()
 		state::desktop_icons_visible.set_value(true);
 	}
 
-	state::desktop_icons_visible.bind_value_changed(Windows::SetDesktopIconsVisible);
+	state::desktop_icons_visible.bind_value_changed(set_icons_visible);
 
 	obs_frontend_add_event_callback(callback, nullptr);
 	return true;
