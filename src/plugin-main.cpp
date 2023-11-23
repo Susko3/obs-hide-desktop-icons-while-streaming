@@ -31,7 +31,7 @@ void update(const size_t index, const bool value)
 	state::current_state.set_value(val);
 }
 
-void callback(obs_frontend_event event, void *data)
+void callback(const obs_frontend_event event, void *)
 {
 	(void)data;
 
