@@ -1,6 +1,7 @@
 ﻿#include "state.h"
 
-namespace state {
+namespace state
+{
 
 bool should_be_hidden()
 {
@@ -11,7 +12,7 @@ bool should_be_hidden()
 		return false;
 
 	const auto s_and_c = settings & current;
-	
+
 	if (s_and_c.test(bit_index::streaming_active))
 		return true;
 	if (s_and_c.test(bit_index::recording_active))

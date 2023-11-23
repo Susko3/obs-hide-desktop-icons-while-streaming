@@ -18,7 +18,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 
 #pragma once
 
-namespace Windows {
+namespace Windows
+{
 
 /**
  * @brief Queries the operating system for desktop icons visibility.

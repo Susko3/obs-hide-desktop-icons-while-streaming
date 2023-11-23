@@ -30,7 +30,7 @@ BraceWrapping:
   AfterControlStatement: Never
   AfterEnum: false
   AfterFunction: true
-  AfterNamespace: false
+  AfterNamespace: true
   AfterObjCDeclaration: false
   AfterStruct: false
   AfterUnion: false
@@ -66,7 +66,7 @@ IndentWidth: 8
 IndentWrappedFunctionNames: false
 KeepEmptyLinesAtTheStartOfBlocks: true
 MaxEmptyLinesToKeep: 1
-NamespaceIndentation: None
+NamespaceIndentation: Inner
 #ObjCBinPackProtocolList: Auto  # requires clang-format 7
 ObjCBlockIndentWidth: 8
 ObjCSpaceAfterProperty: true

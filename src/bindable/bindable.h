@@ -37,7 +37,7 @@ template<typename T> void bindable<T>::set_value(T value)
 	}
 }
 
-template<typename T> void bindable<T>::bind_value_changed(typename bindable<T>::value_changed_handler handler, bool run_once_immediately)
+template<typename T> void bindable<T>::bind_value_changed(value_changed_handler handler, bool run_once_immediately)
 {
 	value_changed_handlers_.push_back(handler);
 

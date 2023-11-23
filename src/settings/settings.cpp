@@ -7,46 +7,51 @@
 
 // code for the settings item under OBS → Tools
 
-namespace settings {
+namespace settings
+{
 
 const char *config_file_string = "obs-hide-desktop-icons-while-streaming.json";
 
-namespace property_id {
-const auto hide_when = "text1";
-const auto explanation_text = "explanation_text";
-const auto streaming_active = "streaming_active";
-const auto recording_active = "recording_active";
-const auto display_capture = "display_capture";
+namespace property_id
+{
+	const auto hide_when = "text1";
+	const auto explanation_text = "explanation_text";
+	const auto streaming_active = "streaming_active";
+	const auto recording_active = "recording_active";
+	const auto display_capture = "display_capture";
 }
 
-namespace property_name {
-const auto streaming_active = "Streaming is active";
-const auto recording_active = "Recording is active";
-const auto display_capture = "Display Capture source is visible "; // space so it looks nice with the long description
+namespace property_name
+{
+	const auto streaming_active = "Streaming is active";
+	const auto recording_active = "Recording is active";
+	const auto display_capture = "Display Capture source is visible "; // space so it looks nice with the long description
 }
 
-namespace info_text {
-const auto hide_when = "Hide desktop icons when:";
-const auto not_available = "Hiding when a display capture source is visible is not yet implemented. Check back in a future version of the plugin!";
-const auto always_visible = "Desktop icons will always be visible.";
-const auto streaming = "Desktop icons will be hidden when OBS is streaming.";
-const auto recording = "Desktop icons will be hidden when OBS is recording.";
-const auto recording_or_streaming = "Desktop icons will be hidden when OBS is streaming <b>or</b> recording.";
-const auto display_capture = "Desktop icons will be hidden when a Display Capture Source is visible in the active Scene.";
-const auto recording_and_display_capture = "Desktop icons will be hidden when OBS is recording <b>and</b> a Display Capture Source is visible in the active Scene.";
-const auto streaming_and_display_capture = "Desktop icons will be hidden when OBS is streaming <b>and</b> a Display Capture Source is visible in the active Scene.";
-const auto recording_or_streaming_and_display_capture = "Desktop icons will be hidden when OBS is streaming <b>or</b> recording, <b>and</b> a Display Capture Source is visible in the active Scene.";
+namespace info_text
+{
+	const auto hide_when = "Hide desktop icons when:";
+	const auto not_available = "Hiding when a display capture source is visible is not yet implemented. Check back in a future version of the plugin!";
+	const auto always_visible = "Desktop icons will always be visible.";
+	const auto streaming = "Desktop icons will be hidden when OBS is streaming.";
+	const auto recording = "Desktop icons will be hidden when OBS is recording.";
+	const auto recording_or_streaming = "Desktop icons will be hidden when OBS is streaming <b>or</b> recording.";
+	const auto display_capture = "Desktop icons will be hidden when a Display Capture Source is visible in the active Scene.";
+	const auto recording_and_display_capture = "Desktop icons will be hidden when OBS is recording <b>and</b> a Display Capture Source is visible in the active Scene.";
+	const auto streaming_and_display_capture = "Desktop icons will be hidden when OBS is streaming <b>and</b> a Display Capture Source is visible in the active Scene.";
+	const auto recording_or_streaming_and_display_capture =
+		"Desktop icons will be hidden when OBS is streaming <b>or</b> recording, <b>and</b> a Display Capture Source is visible in the active Scene.";
 
-const auto description_text_list = {
-	always_visible,
-	streaming,
-	recording,
-	recording_or_streaming,
-	display_capture,
-	streaming_and_display_capture,
-	recording_and_display_capture,
-	recording_or_streaming_and_display_capture
-};
+	const auto description_text_list = {
+		always_visible,
+		streaming,
+		recording,
+		recording_or_streaming,
+		display_capture,
+		streaming_and_display_capture,
+		recording_and_display_capture,
+		recording_or_streaming_and_display_capture
+	};
 }
 
 std::bitset<3> stored_settings; // for text visibility only, actual settings should only apply when saved
@@ -82,13 +87,13 @@ void dummy_source_update(void *, obs_data_t *settings)
 
 void *dummy_source_create(obs_data_t *settings, obs_source_t *source)
 {
-	int *lol = new int(42);
+	auto lol = new int(42);
 	return lol;
 }
 
 void dummy_source_destroy(void *data)
 {
-	int *lol = static_cast<int *>(data);
+	auto lol = static_cast<int *>(data);
 	delete lol;
 }
 
