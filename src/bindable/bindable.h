@@ -34,7 +34,12 @@ public:
 		: value_(value) {}
 
 	T get_value();
-	void set_value(T value);
+	/**
+	 * \brief Sets the value of the bindable, propagating it to bindings if it changed.
+	 * \param value The new value
+	 * \return Whether the underlying value actually changed
+	 */
+	bool set_value(T value);
 
 	/**
 	 * \brief Triggers a value change event to be fired to all handlers.
@@ -49,13 +54,14 @@ template<typename T> T bindable<T>::get_value()
 	return value_;
 }
 
-template<typename T> void bindable<T>::set_value(T value)
+template<typename T> bool bindable<T>::set_value(T value)
 {
 	if (value_ == value)
-		return;
+		return false;
 
 	value_ = value;
 	trigger_change();
+	return true;
 }
 
 template<typename T> void bindable<T>::trigger_change()
