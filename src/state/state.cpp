@@ -26,8 +26,14 @@ bool should_be_hidden()
 	const auto settings = settings_state.get_value();
 	const auto current = current_state.get_value();
 
+	if (settings.none())
+		return false;
+
 	if (settings.test(bit_index::display_capture) && !current.test(bit_index::display_capture))
 		return false;
+
+	if ((settings & std::bitset<3>(0b011)).none())
+		return true;
 
 	const auto s_and_c = settings & current;
 
