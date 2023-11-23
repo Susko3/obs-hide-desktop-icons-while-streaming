@@ -80,6 +80,7 @@ bool obs_module_load()
 {
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
 
+	state::setup();
 	settings::on_obs_module_load();
 
 	try {
