@@ -14,37 +14,6 @@ namespace settings {
 
 const char *config_file_string = "obs-hide-desktop-icons-while-streaming.json";
 
-const char *dummy_source_get_name(void *)
-{
-	return obs_module_text("ColorSource");
-}
-
-void dummy_source_update(void *, obs_data_t *settings)
-{
-	// auto *context = static_cast<color_source *>(data);
-	uint32_t color = (uint32_t)obs_data_get_int(settings, "color");
-	uint32_t width = (uint32_t)obs_data_get_int(settings, "width");
-	uint32_t height = (uint32_t)obs_data_get_int(settings, "height");
-
-	// vec4_from_rgba(&context->color, color);
-	// vec4_from_rgba_srgb(&context->color_srgb, color);
-	// context->width = width;
-	// context->height = height;
-}
-
-void *dummy_source_create(obs_data_t *settings, obs_source_t *source)
-{
-	int *lol = new int(42);
-	return lol;
-}
-
-void dummy_source_destroy(void *data)
-{
-	int *lol = static_cast<int *>(data);
-	// obs_log(LOG_INFO, "hello %d", *lol);
-	delete lol;
-}
-
 namespace property_id {
 const auto hide_when = "text1";
 const auto explanation_text = "explanation_text";
@@ -96,6 +65,27 @@ bool update_stored_settings(obs_data_t *settings)
 		return true;
 	}
 	return false;
+}
+
+const char *dummy_source_get_name(void *)
+{
+	return obs_module_text("ColorSource");
+}
+
+void dummy_source_update(void *, obs_data_t *settings)
+{
+}
+
+void *dummy_source_create(obs_data_t *settings, obs_source_t *source)
+{
+	int *lol = new int(42);
+	return lol;
+}
+
+void dummy_source_destroy(void *data)
+{
+	int *lol = static_cast<int *>(data);
+	delete lol;
 }
 
 void update_props_explanation_text(obs_properties_t *props)
