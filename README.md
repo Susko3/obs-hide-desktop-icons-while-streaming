@@ -10,7 +10,7 @@ Just a simple plugin that will automaticall hide icons on your desktop while str
 It does the same as toggling *Show desktop icons* in the right-click menu on the desktop.
 
 When you start streaming or recording, the desktop icons will hide for the duration of your stream or recording.
-When `Stop streaming/Recording` is clicked, the icons will show again.
+When `Stop Streaming/Recording` is clicked, the icons will show again.
 
 If, for any reason, the desktop icons don't get restored again (due to a bug in this plugin or OBS crashing), you can always manually show the desktop icons by right-clicking on your desktop.
 
