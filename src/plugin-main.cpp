@@ -64,7 +64,7 @@ void set_icons_visible(const bool value)
 	try {
 		Windows::SetDesktopIconsVisible(value);
 	} catch (const std::system_error &e) {
-		obs_log(LOG_ERROR, "Error: %s", e.what());
+		obs_log(LOG_ERROR, "Error when changing desktop icon visibility: %s", e.what());
 	}
 }
 
