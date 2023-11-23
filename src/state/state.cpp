@@ -45,15 +45,20 @@ bool should_be_hidden()
 	return false;
 }
 
-void update_visibility(std::bitset<3>)
+void update_visibility()
 {
-	desktop_icons_visible.set_value(!should_be_hidden());
+	if (const auto forced = force_desktop_icons_visible.get_value(); forced.has_value()) {
+		desktop_icons_visible.set_value(forced.value(), true);
+	} else {
+		desktop_icons_visible.set_value(!should_be_hidden());
+	}
 }
 
 void setup()
 {
-	current_state.bind_value_changed(update_visibility);
-	settings_state.bind_value_changed(update_visibility);
+	current_state.bind_value_changed([](auto) { update_visibility(); });
+	settings_state.bind_value_changed([](auto) { update_visibility(); });
+	force_desktop_icons_visible.bind_value_changed([](auto) { update_visibility(); });
 }
 
 void update_bit(const size_t index, const bool value)

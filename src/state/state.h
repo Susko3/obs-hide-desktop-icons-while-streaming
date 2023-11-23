@@ -19,6 +19,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #pragma once
 #include "bindable/bindable.h"
 #include <bitset>
+#include <optional>
 
 namespace state
 {
@@ -31,6 +32,7 @@ namespace bit_index
 }
 
 inline bindable<bool> desktop_icons_visible{true};
+inline bindable<std::optional<bool>> force_desktop_icons_visible{std::nullopt};
 inline bindable<std::bitset<3>> current_state{std::bitset<3>()};
 inline bindable<std::bitset<3>> settings_state{std::bitset<3>()};
 void setup();

@@ -37,9 +37,10 @@ public:
 	/**
 	 * \brief Sets the value of the bindable, propagating it to bindings if it changed.
 	 * \param value The new value
+	 * \param force_change Whether to force propagate new value to bindings, even if it's the same value
 	 * \return Whether the underlying value actually changed
 	 */
-	bool set_value(T value);
+	bool set_value(T value, bool force_change = false);
 
 	/**
 	 * \brief Triggers a value change event to be fired to all handlers.
@@ -54,9 +55,9 @@ template<typename T> T bindable<T>::get_value()
 	return value_;
 }
 
-template<typename T> bool bindable<T>::set_value(T value)
+template<typename T> bool bindable<T>::set_value(T value, const bool force_change)
 {
-	if (value_ == value)
+	if (value_ == value && !force_change)
 		return false;
 
 	value_ = value;
