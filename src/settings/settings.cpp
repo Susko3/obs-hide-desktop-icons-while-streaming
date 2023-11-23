@@ -171,8 +171,8 @@ void on_obs_frontend_event_finished_loading()
 
 	const auto json_path = obs_module_config_path(config_file_string);
 	const auto settings = obs_data_create_from_json_file(json_path);
-	update_stored_settings(settings);
 	dummy = obs_source_create(dummy_source_name, "Hide desktop icons while streaming", settings, nullptr);
+	update_stored_settings(obs_source_get_settings(dummy)); // update settings after the dummy source has had a change to fill in the defaults.
 	obs_data_release(settings);
 	bfree(json_path);
 
