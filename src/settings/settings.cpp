@@ -52,7 +52,7 @@ const auto description_text_list = {
 };
 }
 
-std::bitset<3> stored_settings; // for text visibiliry only, actual settings should only apply when saved
+std::bitset<3> stored_settings; // for text visibility only, actual settings should only apply when saved
 
 bool update_stored_settings(obs_data_t *settings)
 {
