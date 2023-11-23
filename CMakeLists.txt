@@ -37,6 +37,8 @@ endif()
 target_sources(
   ${CMAKE_PROJECT_NAME}
   PRIVATE src/bindable/bindable.h
+          src/monitor_capture_manager/monitor_capture_manager.cpp
+          src/monitor_capture_manager/monitor_capture_manager.h
           src/settings/settings.cpp
           src/settings/settings.h
           src/state/state.cpp

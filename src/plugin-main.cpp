@@ -16,6 +16,7 @@ You should have received a copy of the GNU General Public License along
 with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
+#include "monitor_capture_manager/monitor_capture_manager.h"
 #include "settings/settings.h"
 #include "state/state.h"
 #include "windows/windows-main.h"
@@ -36,6 +37,11 @@ void callback(const obs_frontend_event event, void *)
 	switch (event) {
 	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
 		settings::on_obs_frontend_event_finished_loading();
+		monitor_capture_manager::on_obs_frontend_event_finished_loading();
+		break;
+
+	case OBS_FRONTEND_EVENT_SCENE_CHANGED:
+		monitor_capture_manager::on_obs_frontend_event_scene_changed();
 		break;
 
 	case OBS_FRONTEND_EVENT_STREAMING_STARTING:

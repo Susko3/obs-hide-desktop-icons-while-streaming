@@ -146,8 +146,6 @@ obs_properties_t *dummy_source_properties(void *)
 	const auto streaming_active = obs_properties_add_bool(props, property_id::streaming_active, property_name::streaming_active);
 	const auto recording_active = obs_properties_add_bool(props, property_id::recording_active, property_name::recording_active);
 	const auto display_capture = obs_properties_add_bool(props, property_id::display_capture, property_name::display_capture);
-	obs_property_set_enabled(display_capture, false);
-	obs_property_set_long_description(display_capture, info_text::not_available);
 
 	const auto explanation_text = obs_properties_add_text(props, property_id::explanation_text, "explanation_text", OBS_TEXT_INFO);
 	obs_property_text_set_info_word_wrap(explanation_text, false); // disable weird behaviour when toggling settings.
@@ -165,7 +163,6 @@ void dummy_source_defaults(obs_data_t *settings)
 	obs_data_set_default_bool(settings, property_id::streaming_active, true);
 	obs_data_set_default_bool(settings, property_id::recording_active, false);
 	obs_data_set_default_bool(settings, property_id::display_capture, false);
-	obs_data_set_bool(settings, property_id::display_capture, false);
 }
 
 const char *dummy_source_name = "obs-hide-desktop-icons-while-streaming_dummy-source";
