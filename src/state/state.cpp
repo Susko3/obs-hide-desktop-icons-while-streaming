@@ -55,4 +55,12 @@ void setup()
 	current_state.bind_value_changed(update_visibility);
 	settings_state.bind_value_changed(update_visibility);
 }
+
+void update_bit(const size_t index, const bool value)
+{
+	auto tr = current_state.get_value();
+	tr.set(index, value);
+	current_state.set_value(tr);
+}
+
 }

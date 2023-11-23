@@ -34,4 +34,5 @@ inline bindable<bool> desktop_icons_visible{true};
 inline bindable<std::bitset<3>> current_state{std::bitset<3>()};
 inline bindable<std::bitset<3>> settings_state{std::bitset<3>()};
 void setup();
+void update_bit(size_t index, bool value);
 }

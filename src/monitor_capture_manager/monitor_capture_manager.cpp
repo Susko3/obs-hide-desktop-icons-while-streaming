@@ -22,13 +22,6 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 namespace monitor_capture_manager
 {
 
-void update_bit_state(const bool value)
-{
-	auto current_set = state::current_state.get_value();
-	current_set[state::bit_index::display_capture] = value;
-	state::current_state.set_value(current_set);
-}
-
 bool is_monitor_capture(const obs_source_t *source)
 {
 	using namespace std::string_literals;
@@ -39,7 +32,7 @@ namespace signal_handler
 {
 	void activated(void *, calldata_t *)
 	{
-		update_bit_state(true);
+		state::update_bit(state::bit_index::display_capture, true);
 	}
 
 	void deactivated(void *, calldata_t *)
@@ -100,7 +93,7 @@ void update_from_current_scene()
 {
 	const auto scene = obs_frontend_get_current_scene();
 
-	update_bit_state(source_enumeration_processor::active_any_of(scene, is_monitor_capture));
+	state::update_bit(state::bit_index::display_capture, source_enumeration_processor::active_any_of(scene, is_monitor_capture));
 
 	obs_source_release(scene);
 }

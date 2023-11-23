@@ -25,13 +25,6 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <plugin-support.h>
 #include <system_error>
 
-void update(const size_t index, const bool value)
-{
-	auto val = state::current_state.get_value();
-	val[index] = value;
-	state::current_state.set_value(val);
-}
-
 void callback(const obs_frontend_event event, void *)
 {
 	switch (event) {
@@ -45,16 +38,16 @@ void callback(const obs_frontend_event event, void *)
 		break;
 
 	case OBS_FRONTEND_EVENT_STREAMING_STARTING:
-		update(state::bit_index::streaming_active, true);
+		state::update_bit(state::bit_index::streaming_active, true);
 		break;
 	case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
-		update(state::bit_index::streaming_active, false);
+		state::update_bit(state::bit_index::streaming_active, false);
 		break;
 	case OBS_FRONTEND_EVENT_RECORDING_STARTING:
-		update(state::bit_index::recording_active, true);
+		state::update_bit(state::bit_index::recording_active, true);
 		break;
 	case OBS_FRONTEND_EVENT_RECORDING_STOPPED:
-		update(state::bit_index::recording_active, false);
+		state::update_bit(state::bit_index::recording_active, false);
 		break;
 
 	case OBS_FRONTEND_EVENT_EXIT:
