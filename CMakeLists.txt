@@ -34,6 +34,10 @@ if(ENABLE_QT)
                AUTORCC ON)
 endif()
 
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE src/plugin-main.cpp src/Windows/windows-main.cpp)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    src/windows/windows-main.cpp
+    src/windows/windows-main.h
+    src/plugin-main.cpp
+)
 
 set_target_properties_plugin(${CMAKE_PROJECT_NAME} PROPERTIES OUTPUT_NAME ${_name})
