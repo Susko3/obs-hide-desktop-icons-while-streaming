@@ -1,12 +1,8 @@
-﻿#include <bitset>
+﻿#include "settings.h"
+#include <bitset>
 #include <filesystem>
-
-#include <obs-module.h>
 #include <obs-frontend-api.h>
-
-#include "settings.h"
-#include "plugin-support.h"
-
+#include <obs-module.h>
 
 // code for the settings item under OBS → Tools
 
@@ -60,10 +56,12 @@ bool update_stored_settings(obs_data_t *settings)
 	new_settings[0] = obs_data_get_bool(settings, property_id::streaming_active);
 	new_settings[1] = obs_data_get_bool(settings, property_id::recording_active);
 	new_settings[2] = obs_data_get_bool(settings, property_id::display_capture);
+
 	if (stored_settings != new_settings) {
 		stored_settings = new_settings;
 		return true;
 	}
+
 	return false;
 }
 
@@ -161,7 +159,6 @@ void on_obs_module_load()
 {
 	obs_register_source(&dummy_source_definition);
 }
-
 
 void on_obs_frontend_event_finished_loading()
 {

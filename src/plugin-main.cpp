@@ -16,14 +16,11 @@ You should have received a copy of the GNU General Public License along
 with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
+#include "settings/settings.h"
+#include "windows/windows-main.h"
 #include <obs-frontend-api.h>
 #include <obs-module.h>
 #include <plugin-support.h>
-
-#include "windows/windows-main.h"
-#include "settings/settings.h"
-
-// FROM https://stackoverflow.com/a/53347282
 #include <system_error>
 
 bool streamingActive = false;
@@ -88,8 +85,7 @@ bool obs_module_load()
 	try {
 		desktopIconsVisible = Windows::GetDesktopIconsVisible();
 	} catch (const std::system_error &e) {
-		obs_log(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s",
-		        e.what());
+		obs_log(LOG_ERROR, "Error when fetching desktop icon visibility. Assuming it's visible. Error: %s", e.what());
 	}
 
 	obs_frontend_add_event_callback(callback, nullptr);

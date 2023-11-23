@@ -17,14 +17,13 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
 #include "windows-main.h"
-
-// FROM https://stackoverflow.com/a/53347282
+#include <ShlObj.h>
+#include <atlcomcli.h>
 #include <string>
 #include <system_error>
-#include <atlcomcli.h> // CComPtr & Co.
-#include <ShlObj.h>    // Shell API
 
 namespace Windows {
+// FROM https://stackoverflow.com/a/53347282
 
 // Throw a std::system_error if the HRESULT indicates failure.
 template<typename T> void ThrowIfFailed(HRESULT hr, T &&msg)
