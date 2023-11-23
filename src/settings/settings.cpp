@@ -39,6 +39,14 @@ namespace property_id
 	const auto streaming_active = "streaming_active";
 	const auto recording_active = "recording_active";
 	const auto display_capture = "display_capture";
+
+	const auto spacer = "spacer";
+	const auto manual_control = "manual_control";
+
+	const auto force_explanation_text = "force_explanation_text";
+	const auto force_show = "force_show";
+	const auto force_hide = "force_hide";
+	const auto force_reset = "force_reset";
 }
 
 namespace property_name
@@ -46,6 +54,12 @@ namespace property_name
 	const auto streaming_active = "Streaming is active";
 	const auto recording_active = "Recording is active";
 	const auto display_capture = "Display Capture source is visible";
+
+	const auto manual_control = "Show manual controls";
+
+	const auto force_show = "Force show";
+	const auto force_hide = "Force hide";
+	const auto force_reset = "Reset (Use AutoHide)";
 }
 
 namespace info_text
@@ -71,6 +85,9 @@ namespace info_text
 		recording_and_display_capture,
 		recording_or_streaming_and_display_capture
 	};
+
+	const auto force_explanation_text = "In case you need to manually ensure desktop icons are shown or hidden, you can do so with the buttons below. "
+		"These are not saved, and will default to <i>Reset</i> when OBS starts.";
 }
 
 std::bitset<3> stored_settings; // for text visibility only, actual settings should only apply when saved
@@ -136,6 +153,48 @@ bool on_any_checkbox_changed(obs_properties_t *props, obs_property_t *property, 
 	return changed;
 }
 
+
+bool button_callback(obs_properties_t *props, obs_property_t *property, void *)
+{
+	const auto name = std::string{obs_property_name(property)};
+
+	if (name == property_id::force_show) {
+		state::force_desktop_icons_visible.set_value(true);
+	} else if (name == property_id::force_hide) {
+		state::force_desktop_icons_visible.set_value(false);
+	} else if (name == property_id::force_reset) {
+		state::force_desktop_icons_visible.set_value(std::nullopt);
+	}
+
+	for (const auto pid : {property_id::force_show, property_id::force_hide, property_id::force_reset}) {
+		const auto tr = obs_properties_get(props, pid);
+		obs_property_set_enabled(tr, pid != name);
+	}
+
+	return true;
+}
+
+bool show_manual_controls(obs_properties_t *props, obs_property_t *, void *)
+{
+	obs_properties_remove_by_name(props, property_id::manual_control);
+
+	obs_properties_add_text(props, property_id::force_explanation_text, info_text::force_explanation_text, OBS_TEXT_INFO);
+	const auto force_show = obs_properties_add_button2(props, property_id::force_show, property_name::force_show, button_callback, nullptr);
+	const auto force_hide = obs_properties_add_button2(props, property_id::force_hide, property_name::force_hide, button_callback, nullptr);
+	const auto force_reset = obs_properties_add_button2(props, property_id::force_reset, property_name::force_reset, button_callback, nullptr);
+
+	const auto forced = state::force_desktop_icons_visible.get_value();
+	if (!forced.has_value()) {
+		obs_property_set_enabled(force_reset, false);
+	} else if (forced.value()) {
+		obs_property_set_enabled(force_show, false);
+	} else {
+		obs_property_set_enabled(force_hide, false);
+	}
+
+	return true;
+}
+
 obs_properties_t *dummy_source_properties(void *)
 {
 	obs_properties_t *props = obs_properties_create();
@@ -149,6 +208,9 @@ obs_properties_t *dummy_source_properties(void *)
 
 	const auto explanation_text = obs_properties_add_text(props, property_id::explanation_text, "explanation_text", OBS_TEXT_INFO);
 	obs_property_text_set_info_word_wrap(explanation_text, false); // disable weird behaviour when toggling settings.
+
+	obs_properties_add_text(props, property_id::spacer, "", OBS_TEXT_INFO); // spacer
+	obs_properties_add_button2(props, property_id::manual_control, property_name::manual_control, show_manual_controls, nullptr);
 
 	for (const auto p : {streaming_active, recording_active, display_capture})
 		obs_property_set_modified_callback(p, on_any_checkbox_changed);
