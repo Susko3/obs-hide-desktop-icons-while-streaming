@@ -1,4 +1,5 @@
 ﻿#include "settings.h"
+#include "state/state.h"
 #include <bitset>
 #include <filesystem>
 #include <obs-frontend-api.h>
@@ -50,7 +51,7 @@ const auto description_text_list = {
 
 std::bitset<3> stored_settings; // for text visibility only, actual settings should only apply when saved
 
-bool update_stored_settings(obs_data_t *settings)
+bool update_stored_settings(obs_data_t *settings, bool update_bindable)
 {
 	std::bitset<3> new_settings;
 	new_settings[0] = obs_data_get_bool(settings, property_id::streaming_active);
@@ -60,6 +61,10 @@ bool update_stored_settings(obs_data_t *settings)
 	if (stored_settings != new_settings) {
 		stored_settings = new_settings;
 		return true;
+	}
+
+	if (update_bindable) {
+		state::settings_state.set_value(stored_settings);
 	}
 
 	return false;
@@ -72,6 +77,7 @@ const char *dummy_source_get_name(void *)
 
 void dummy_source_update(void *, obs_data_t *settings)
 {
+	update_stored_settings(settings, true);
 }
 
 void *dummy_source_create(obs_data_t *settings, obs_source_t *source)
@@ -97,7 +103,7 @@ obs_source_t *dummy;
 
 bool on_any_changed(obs_properties_t *props, obs_property_t *property, obs_data_t *settings)
 {
-	const bool changed = update_stored_settings(settings);
+	const bool changed = update_stored_settings(settings, false);
 	if (changed) {
 		update_props_explanation_text(props);
 	}
@@ -169,7 +175,7 @@ void on_obs_frontend_event_finished_loading()
 	const auto json_path = obs_module_config_path(config_file_string);
 	const auto settings = obs_data_create_from_json_file(json_path);
 	dummy = obs_source_create(dummy_source_name, "Hide desktop icons while streaming", settings, nullptr);
-	update_stored_settings(obs_source_get_settings(dummy)); // update settings after the dummy source has had a change to fill in the defaults.
+	update_stored_settings(obs_source_get_settings(dummy), true); // update settings after the dummy source has had a change to fill in the defaults.
 	obs_data_release(settings);
 	bfree(json_path);
 
