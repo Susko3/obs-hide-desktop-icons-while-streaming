@@ -76,7 +76,7 @@ namespace source_enumeration_processor
 	}
 
 	/**
-	 * \brief Checks the scene to see if there exsist at least one active source that matches the predicate
+	 * \brief Checks the scene to see if there exsist at least one active source that matches the predicate.
 	 * \param scene The scene to check
 	 * \param predicate The predicate to match the sources to
 	 * \return true if a matching source was found
