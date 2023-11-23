@@ -45,7 +45,7 @@ namespace property_name
 {
 	const auto streaming_active = "Streaming is active";
 	const auto recording_active = "Recording is active";
-	const auto display_capture = "Display Capture source is visible "; // space so it looks nice with the long description
+	const auto display_capture = "Display Capture source is visible";
 }
 
 namespace info_text
