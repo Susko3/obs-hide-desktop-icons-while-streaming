@@ -11,6 +11,8 @@ namespace settings
 {
 
 const char *config_file_string = "obs-hide-desktop-icons-while-streaming.json";
+const auto tool_item_name = "AutoHide &Desktop Icons";
+const auto settings_window_name = "AutoHide Desktop Icons";
 
 namespace property_id
 {
@@ -179,12 +181,12 @@ void on_obs_frontend_event_finished_loading()
 
 	const auto json_path = obs_module_config_path(config_file_string);
 	const auto settings = obs_data_create_from_json_file(json_path);
-	dummy = obs_source_create(dummy_source_name, "Hide desktop icons while streaming", settings, nullptr);
+	dummy = obs_source_create(dummy_source_name, settings_window_name, settings, nullptr);
 	update_stored_settings(obs_source_get_settings(dummy), true); // update settings after the dummy source has had a change to fill in the defaults.
 	obs_data_release(settings);
 	bfree(json_path);
 
-	obs_frontend_add_tools_menu_item("Auto Hide &Desktop Icons", &open_settings, nullptr);
+	obs_frontend_add_tools_menu_item(tool_item_name, &open_settings, nullptr);
 }
 
 void on_obs_frontend_event_exit()
