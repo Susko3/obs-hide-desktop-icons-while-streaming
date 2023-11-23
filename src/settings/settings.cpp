@@ -127,7 +127,7 @@ void update_props_explanation_text(obs_properties_t *props)
 
 obs_source_t *dummy;
 
-bool on_any_changed(obs_properties_t *props, obs_property_t *property, obs_data_t *settings)
+bool on_any_checkbox_changed(obs_properties_t *props, obs_property_t *property, obs_data_t *settings)
 {
 	const bool changed = update_stored_settings(settings, false);
 	if (changed) {
@@ -151,7 +151,7 @@ obs_properties_t *dummy_source_properties(void *)
 	obs_property_text_set_info_word_wrap(explanation_text, false); // disable weird behaviour when toggling settings.
 
 	for (const auto p : {streaming_active, recording_active, display_capture})
-		obs_property_set_modified_callback(p, on_any_changed);
+		obs_property_set_modified_callback(p, on_any_checkbox_changed);
 
 	update_props_explanation_text(props);
 
