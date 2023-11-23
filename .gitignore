@@ -17,6 +17,7 @@
 !README.md
 !UPDATING.md
 !pathspec
+!image
 
 # Exclude lock files
 *.lock.json
