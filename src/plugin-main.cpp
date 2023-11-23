@@ -33,8 +33,6 @@ void update(const size_t index, const bool value)
 
 void callback(const obs_frontend_event event, void *)
 {
-	(void)data;
-
 	switch (event) {
 	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
 		settings::on_obs_frontend_event_finished_loading();
