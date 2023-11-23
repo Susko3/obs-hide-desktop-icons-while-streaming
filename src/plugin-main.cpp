@@ -21,6 +21,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include <plugin-support.h>
 
 #include "windows/windows-main.h"
+#include "settings/settings.h"
 
 // FROM https://stackoverflow.com/a/53347282
 #include <system_error>
@@ -59,10 +60,18 @@ void callback(obs_frontend_event event, void *data)
 	(void)data;
 
 	switch (event) {
+	case OBS_FRONTEND_EVENT_FINISHED_LOADING:
+		settings::on_obs_frontend_event_finished_loading();
+		break;
+
 	case OBS_FRONTEND_EVENT_STREAMING_STARTED:
 	case OBS_FRONTEND_EVENT_STREAMING_STOPPED:
 		streamingActive = event == OBS_FRONTEND_EVENT_STREAMING_STARTED;
 		updateDesktopIconsVisibility();
+		break;
+
+	case OBS_FRONTEND_EVENT_EXIT:
+		settings::on_obs_frontend_event_exit();
 		break;
 	}
 }
@@ -73,6 +82,8 @@ OBS_MODULE_USE_DEFAULT_LOCALE(PLUGIN_NAME, "en-US")
 bool obs_module_load()
 {
 	obs_log(LOG_INFO, "plugin loaded successfully (version %s)", PLUGIN_VERSION);
+
+	settings::on_obs_module_load();
 
 	try {
 		desktopIconsVisible = Windows::GetDesktopIconsVisible();

@@ -35,6 +35,8 @@ if(ENABLE_QT)
 endif()
 
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
+    src/settings/settings.cpp
+    src/settings/settings.h
     src/windows/windows-main.cpp
     src/windows/windows-main.h
     src/plugin-main.cpp
