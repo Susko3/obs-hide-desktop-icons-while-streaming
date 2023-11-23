@@ -16,8 +16,7 @@ You should have received a copy of the GNU General Public License along
 with this program. If not, see <https://www.gnu.org/licenses/>
 */
 
-#ifndef WINDOWS_MAIN_H
-#define WINDOWS_MAIN_H
+#pragma once
 
 namespace Windows {
 
@@ -36,5 +35,3 @@ bool GetDesktopIconsVisible();
 void SetDesktopIconsVisible(bool show);
 
 }
-
-#endif

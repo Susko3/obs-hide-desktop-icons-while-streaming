@@ -46,7 +46,7 @@ BreakBeforeBraces: Custom
 BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeColon
 BreakStringLiterals: false  # apparently unpredictable
-ColumnLimit: 120
+ColumnLimit: 200
 CompactNamespaces: false
 ConstructorInitializerAllOnOneLineOrOnePerLine: true
 ConstructorInitializerIndentWidth: 8

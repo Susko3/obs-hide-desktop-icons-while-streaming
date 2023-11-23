@@ -19,10 +19,10 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 #include "windows-main.h"
 
 // FROM https://stackoverflow.com/a/53347282
-#include <atlcomcli.h> // CComPtr & Co.
-#include <ShlObj.h>    // Shell API
 #include <string>
 #include <system_error>
+#include <atlcomcli.h> // CComPtr & Co.
+#include <ShlObj.h>    // Shell API
 
 namespace Windows {
 
