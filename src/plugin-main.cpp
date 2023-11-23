@@ -94,7 +94,6 @@ void obs_module_unload()
 	obs_frontend_remove_event_callback(callback, nullptr);
 
 	state::desktop_icons_visible.unbind_all();
-	state::desktop_icons_visible.set_value(false);
 
 	obs_log(LOG_INFO, "plugin unloaded");
 }
