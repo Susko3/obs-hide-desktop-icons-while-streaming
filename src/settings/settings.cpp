@@ -51,7 +51,6 @@ namespace property_name
 namespace info_text
 {
 	const auto hide_when = "Hide desktop icons when:";
-	const auto not_available = "Hiding when a display capture source is visible is not yet implemented. Check back in a future version of the plugin!";
 	const auto always_visible = "Desktop icons will always be visible.";
 	const auto streaming = "Desktop icons will be hidden when OBS is streaming.";
 	const auto recording = "Desktop icons will be hidden when OBS is recording.";
@@ -76,8 +75,10 @@ namespace info_text
 
 std::bitset<3> stored_settings; // for text visibility only, actual settings should only apply when saved
 
-bool update_stored_settings(obs_data_t *settings, bool update_bindable)
+bool update_stored_settings(obs_data_t *settings, const bool update_bindable)
 {
+	bool changed = false;
+
 	std::bitset<3> new_settings;
 	new_settings[0] = obs_data_get_bool(settings, property_id::streaming_active);
 	new_settings[1] = obs_data_get_bool(settings, property_id::recording_active);
@@ -85,14 +86,14 @@ bool update_stored_settings(obs_data_t *settings, bool update_bindable)
 
 	if (stored_settings != new_settings) {
 		stored_settings = new_settings;
-		return true;
+		changed = true;
 	}
 
 	if (update_bindable) {
 		state::settings_state.set_value(stored_settings);
 	}
 
-	return false;
+	return changed;
 }
 
 const char *dummy_source_get_name(void *)
