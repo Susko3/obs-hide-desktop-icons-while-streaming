@@ -35,6 +35,11 @@ public:
 
 	T get_value();
 	void set_value(T value);
+
+	/**
+	 * \brief Triggers a value change event to be fired to all handlers.
+	 */
+	void trigger_change();
 	void bind_value_changed(value_changed_handler handler, bool run_once_immediately = false);
 	void unbind_all();
 };
@@ -50,6 +55,11 @@ template<typename T> void bindable<T>::set_value(T value)
 		return;
 
 	value_ = value;
+	trigger_change();
+}
+
+template<typename T> void bindable<T>::trigger_change()
+{
 	for (const auto &f : value_changed_handlers_) {
 		f(value_);
 	}
