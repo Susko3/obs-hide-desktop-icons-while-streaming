@@ -22,6 +22,7 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 namespace monitor_capture_manager
 {
 
+void update_from_current_scene();
 bool connect_monitor_capture_signals(void *, obs_source_t *source);
 
 bool is_monitor_capture(const obs_source_t *source)

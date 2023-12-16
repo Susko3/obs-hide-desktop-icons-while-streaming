@@ -23,7 +23,6 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 
 namespace monitor_capture_manager
 {
-void update_from_current_scene();
 void on_obs_frontend_event_finished_loading();
 void on_obs_frontend_event_scene_changed();
 }
