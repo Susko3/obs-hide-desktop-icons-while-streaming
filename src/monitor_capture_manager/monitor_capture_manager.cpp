@@ -39,6 +39,11 @@ namespace signal_handler
 	{
 		update_from_current_scene(); // we have been deactivated, but need to check the whole scene if any monitor source is still active
 	}
+
+	void destroyed(void *, calldata_t *)
+	{
+		update_from_current_scene(); // we have been destroyed/removed, but need to check the whole scene if any monitor source is still active
+	}
 }
 
 bool connect_monitor_capture_signals(void *, obs_source_t *source)
@@ -47,6 +52,7 @@ bool connect_monitor_capture_signals(void *, obs_source_t *source)
 		const auto signal_handler = obs_source_get_signal_handler(source);
 		signal_handler_connect(signal_handler, "activate", signal_handler::activated, nullptr);
 		signal_handler_connect(signal_handler, "deactivate", signal_handler::deactivated, nullptr);
+		signal_handler_connect(signal_handler, "destroy", signal_handler::destroyed, nullptr);
 	}
 
 	return true;
