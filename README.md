@@ -40,6 +40,6 @@ This plugin can be configured by clicking on `Tools` in the OBS toolbar and then
 
 By clicking on the checkboxes, you can configure desktop icons to hide while streaming or recording. The settings apply when saved, including if you're currently streaming or recording.
 
-![Configuration window](/image/configuration.png)
+You can also configure to hide desktop icons only when a display capture source is visible.
 
-※ Please note that hiding only when a display capture source is visible is not yet available. The feature is currently in the planning state and might appear in a future version.
+![Configuration window](/image/configuration.png)
