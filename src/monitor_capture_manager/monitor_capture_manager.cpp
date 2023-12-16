@@ -22,6 +22,8 @@ with this program. If not, see <https://www.gnu.org/licenses/>
 namespace monitor_capture_manager
 {
 
+bool connect_monitor_capture_signals(void *, obs_source_t *source);
+
 bool is_monitor_capture(const obs_source_t *source)
 {
 	using namespace std::string_literals;
@@ -44,6 +46,15 @@ namespace signal_handler
 	{
 		update_from_current_scene(); // we have been destroyed/removed, but need to check the whole scene if any monitor source is still active
 	}
+
+	void source_created(void *, calldata_t *calldata)
+	{
+		const auto source = static_cast<obs_source_t *>(calldata_ptr(calldata, "source"));
+		if (is_monitor_capture(source)) {
+			connect_monitor_capture_signals(nullptr, source);
+			state::update_bit(state::bit_index::display_capture, true); // let's assume the new display capture is active and visible be default.
+		}
+	}
 }
 
 bool connect_monitor_capture_signals(void *, obs_source_t *source)
@@ -61,6 +72,17 @@ bool connect_monitor_capture_signals(void *, obs_source_t *source)
 void hook_all_monitor_capture_signals()
 {
 	obs_enum_sources(connect_monitor_capture_signals, nullptr);
+}
+
+/**
+ * \brief Hooks the global `source_create (ptr source)` signal
+ *
+ * See https://docs.obsproject.com/reference-core?highlight=source_create#core-obs-signals
+ */
+void hook_source_create_signal()
+{
+	const auto signal_handler = obs_get_signal_handler();
+	signal_handler_connect(signal_handler, "source_create", signal_handler::source_created, nullptr);
 }
 
 namespace source_enumeration_processor
@@ -108,6 +130,7 @@ void on_obs_frontend_event_finished_loading()
 {
 	state::settings_state.bind_value_changed([](const std::bitset<3> value) {
 		if (value.test(state::bit_index::display_capture)) {
+			hook_source_create_signal(); // only need to do this once, as the signal is global
 			hook_all_monitor_capture_signals();
 			update_from_current_scene();
 		}
